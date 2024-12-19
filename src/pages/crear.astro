@@ -1,0 +1,111 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Crear nuevo recurso">
+  <div class="max-w-2xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-8">Crear nuevo recurso</h1>
+    
+    <form id="resource-form" class="space-y-6">
+      <div>
+        <label for="titulo" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          Título *
+        </label>
+        <input
+          type="text"
+          id="titulo"
+          name="titulo"
+          required
+          class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+        />
+      </div>
+      
+      <div>
+        <label for="descripcion" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          Descripción *
+        </label>
+        <textarea
+          id="descripcion"
+          name="descripcion"
+          rows="4"
+          required
+          class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+        ></textarea>
+      </div>
+      
+      <div>
+        <label for="url" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          URL *
+        </label>
+        <input
+          type="url"
+          id="url"
+          name="url"
+          required
+          class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+        />
+      </div>
+      
+      <div>
+        <label for="tags" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          Tags * (IDs separados por comas)
+        </label>
+        <input
+          type="text"
+          id="tags"
+          name="tags"
+          required
+          placeholder="1, 2, 3"
+          class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+        />
+      </div>
+      
+      <div class="flex justify-end">
+        <button
+          type="submit"
+          class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+          Crear recurso
+        </button>
+      </div>
+    </form>
+  </div>
+</Layout>
+
+<script>
+  import { createResource } from '../services/api.service';
+  import { validateResourceCreate } from '../utils/validation';
+  
+  const form = document.getElementById('resource-form');
+  
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target as HTMLFormElement);
+    const tags = formData.get('tags')?.toString().split(',').map(id => parseInt(id.trim(), 10));
+    
+    const data = {
+      titulo: formData.get('titulo')?.toString() || '',
+      descripcion: formData.get('descripcion')?.toString() || '',
+      url: formData.get('url')?.toString() || '',
+      tags: tags || []
+    };
+    
+    const errors = validateResourceCreate(data);
+    if (errors.length > 0) {
+      alert(errors.join('\n'));
+      return;
+    }
+    
+    try {
+      await createResource(data);
+      window.location.href = '/';
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(`Error al crear el recurso: ${error.message}`);
+      } else {
+        alert('Error al crear el recurso. Por favor, intenta nuevamente.');
+      }
+    }
+  });
+</script>
