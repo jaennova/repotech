@@ -1,5 +1,7 @@
 ---
+import '../styles/global.css';
 import ThemeToggle from '../components/ThemeToggle.svelte';
+import CreateResourceDialog from '../components/CreateResourceDialog.svelte';
 
 interface Props {
   title: string;
@@ -17,6 +19,20 @@ const { title } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <script>
+      const theme = (() => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+          return localStorage.getItem('theme');
+        }
+        return 'light';
+      })();
+      
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    </script>
   </head>
   <body class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
     <nav class="bg-white dark:bg-gray-800 shadow-sm transition-colors">
@@ -29,12 +45,12 @@ const { title } = Astro.props;
           </div>
           <div class="flex items-center space-x-4">
             <ThemeToggle client:load />
-            <a
-              href="/crear"
+            <button
+              id="openCreateDialog"
               class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors"
             >
               Crear Recurso
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -42,5 +58,15 @@ const { title } = Astro.props;
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <slot />
     </main>
+    
+    <CreateResourceDialog client:load />
+    
+    <script>
+      // Manejo del diálogo
+      document.getElementById('openCreateDialog')?.addEventListener('click', () => {
+        const event = new CustomEvent('openCreateDialog');
+        window.dispatchEvent(event);
+      });
+    </script>
   </body>
 </html>

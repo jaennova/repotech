@@ -1,10 +1,9 @@
 import { writable } from 'svelte/store';
+import { isClient } from '../utils/client';
 
 function createThemeStore() {
   const { subscribe, set } = writable<'light' | 'dark'>(
-    typeof window !== 'undefined' 
-      ? window.localStorage.getItem('theme') as 'light' | 'dark' || 'light'
-      : 'light'
+    isClient && localStorage.getItem('theme') === 'dark' ? 'dark' : 'light'
   );
 
   return {
@@ -12,18 +11,22 @@ function createThemeStore() {
     toggle: () => {
       set(current => {
         const newTheme = current === 'light' ? 'dark' : 'light';
-        if (typeof window !== 'undefined') {
-          window.localStorage.setItem('theme', newTheme);
-          document.documentElement.classList.toggle('dark');
+        if (isClient) {
+          localStorage.setItem('theme', newTheme);
+          if (newTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
         }
         return newTheme;
       });
     },
     initialize: () => {
-      if (typeof window !== 'undefined') {
-        const theme = window.localStorage.getItem('theme') as 'light' | 'dark' || 'light';
-        set(theme);
-        if (theme === 'dark') {
+      if (isClient) {
+        const isDark = localStorage.getItem('theme') === 'dark';
+        set(isDark ? 'dark' : 'light');
+        if (isDark) {
           document.documentElement.classList.add('dark');
         }
       }
