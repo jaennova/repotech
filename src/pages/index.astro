@@ -1,28 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ResourceList from '../components/ResourceList.svelte';
-import SearchBar from '../components/SearchBar.svelte';
-import TagFilter from '../components/TagFilter.svelte';
+import FilterSection from '../components/FilterSection.svelte';
 ---
 
 <Layout title="RecursosTech - Recursos para desarrolladores">
-  <div class="max-w-screen-xl mx-auto relative">
-    <div class="flex gap-8">
-      <!-- Sidebar fijo -->
-      <div class="w-64 flex-shrink-0">
-        <div class="sticky top-4">
-          <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 transition-colors">
-            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">Filtros</h2>
-            
-            <!-- Search Bar -->
-            <div class="mb-6">
-              <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Buscar</h3>
-              <SearchBar client:load />
-            </div>
-            
-            <!-- Tag Filter -->
-            <TagFilter client:load />
-          </div>
+  <div class="max-w-screen-xl mx-auto">
+    <div class="flex flex-col lg:flex-row gap-8">
+      <!-- Sidebar with filters - Fixed on desktop -->
+      <div class="w-full lg:w-64 lg:flex-shrink-0">
+        <div class="lg:sticky lg:top-4">
+          <FilterSection client:load className="w-full" />
         </div>
       </div>
 

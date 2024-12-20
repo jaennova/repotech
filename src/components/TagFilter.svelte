@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { getTags } from '../services/api.service';
-  import { handleClientError } from '../utils/errorHandling';
+  import { getTags } from '../services/api/resources';
+  import { isApiError } from '../utils/errorHandling';
   import { resourceStore } from '../stores/resourceStore';
   import LoadingSpinner from './LoadingSpinner.svelte';
   import type { Tag } from '../types/api.types';
@@ -11,15 +11,18 @@
   let loading = true;
   let error: string | null = null;
   
-  onMount(async () => {
+  async function loadTags() {
     try {
       tags = await getTags();
     } catch (e) {
-      error = e.message;
-      handleClientError(e);
+      error = isApiError(e) ? e.message : 'Error al cargar los tags';
     } finally {
       loading = false;
     }
+  }
+  
+  onMount(() => {
+    loadTags();
   });
   
   function toggleTag(tagId: number) {
@@ -28,18 +31,30 @@
     } else {
       selectedTags.add(tagId);
     }
-    selectedTags = selectedTags; // Trigger reactivity
+    selectedTags = selectedTags;
     resourceStore.filterByTags([...selectedTags]);
   }
 </script>
 
-<div class="mb-8">
-  <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Filtrar por tags</h3>
+<div class="space-y-4">
+  <h3 class="text-lg font-medium text-gray-900 dark:text-white">Filtrar por tags</h3>
   
   {#if loading}
     <LoadingSpinner size="sm" />
   {:else if error}
-    <p class="text-red-600 dark:text-red-400">{error}</p>
+    <div class="text-red-600 dark:text-red-400">
+      <p>{error}</p>
+      <button
+        class="mt-2 text-sm font-medium hover:text-red-800 dark:hover:text-red-200"
+        on:click={() => {
+          error = null;
+          loading = true;
+          loadTags();
+        }}
+      >
+        Reintentar
+      </button>
+    </div>
   {:else}
     <div class="flex flex-wrap gap-2">
       {#each tags as tag (tag.id)}
