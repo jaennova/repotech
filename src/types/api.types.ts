@@ -8,6 +8,7 @@ export interface Resource {
   titulo: string;
   descripcion: string;
   url: string;
+  imageUrl?: string;
   tags: Tag[];
   fecha_creacion: string;
   fecha_actualizacion: string;
