@@ -1,110 +1,207 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+import TagSelector from "../components/TagSelector.svelte";
 ---
 
 <Layout title="Crear nuevo recurso">
-  <div class="max-w-2xl mx-auto">
-    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-8">Crear nuevo recurso</h1>
-    
-    <form id="resource-form" class="space-y-6">
-      <div>
-        <label for="titulo" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-          Título *
-        </label>
-        <input
-          type="text"
-          id="titulo"
-          name="titulo"
-          required
-          class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-        />
+  <div class="min-h-screen py-12 px-4 sm:px-6">
+    <div
+      class="max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden"
+    >
+      <!-- Header con gradiente -->
+      <div class="bg-gradient-to-r from-blue-500 to-indigo-600 px-8 py-6">
+        <h1 class="text-2xl font-bold text-white">Crear nuevo recurso</h1>
+        <p class="text-blue-100 mt-2">Comparte conocimiento con la comunidad</p>
       </div>
-      
-      <div>
-        <label for="descripcion" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-          Descripción *
-        </label>
-        <textarea
-          id="descripcion"
-          name="descripcion"
-          rows="4"
-          required
-          class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-        ></textarea>
-      </div>
-      
-      <div>
-        <label for="url" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-          URL *
-        </label>
-        <input
-          type="url"
-          id="url"
-          name="url"
-          required
-          class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-        />
-      </div>
-      
-<div>
-  <label for="tags" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-    Tags * (Nombres separados por comas)
-  </label>
-  <input
-    type="text"
-    id="tags"
-    name="tags"
-    required
-    placeholder="javascript, python, react"
-    class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-  />
-</div>
-      
-      <div class="flex justify-end">
-        <button
-          type="submit"
-          class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-        >
-          Crear recurso
-        </button>
-      </div>
-    </form>
+
+      <!-- Formulario con diseño mejorado -->
+      <form id="resource-form" class="p-8 space-y-8">
+        <!-- Campo de título con icono -->
+        <div class="relative">
+          <label
+            for="titulo"
+            class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block"
+          >
+            Título
+          </label>
+          <div class="relative">
+            <span
+              class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"
+            >
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"
+                ></path>
+              </svg>
+            </span>
+            <input
+              type="text"
+              id="titulo"
+              name="titulo"
+              required
+              class="pl-10 w-full rounded-lg border-gray-200 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white transition-colors duration-200"
+              placeholder="Ej: Guía completa de React Hooks"
+            />
+          </div>
+        </div>
+
+        <!-- Campo de descripción -->
+        <div>
+          <label
+            for="descripcion"
+            class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block"
+          >
+            Descripción
+          </label>
+          <textarea
+            id="descripcion"
+            name="descripcion"
+            rows="4"
+            required
+            class="w-full rounded-lg border-gray-200 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white resize-none transition-colors duration-200"
+            placeholder="Describe brevemente el recurso..."></textarea>
+        </div>
+
+        <!-- Campo de URL con vista previa -->
+        <div>
+          <label
+            for="url"
+            class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block"
+          >
+            URL
+          </label>
+          <div class="relative">
+            <span
+              class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"
+            >
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                ></path>
+              </svg>
+            </span>
+            <input
+              type="url"
+              id="url"
+              name="url"
+              required
+              class="pl-10 w-full rounded-lg border-gray-200 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white transition-colors duration-200"
+              placeholder="https://ejemplo.com/recurso"
+            />
+          </div>
+        </div>
+
+        <!-- Selector de tags mejorado -->
+        <div>
+          <label
+            class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 block"
+          >
+            Tags
+          </label>
+          <TagSelector client:load />
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="flex items-center justify-end space-x-4 pt-6">
+          <button
+            type="button"
+            onclick="window.history.back()"
+            class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="px-6 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-lg hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform transition-all duration-200 hover:scale-105"
+          >
+            Crear recurso
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </Layout>
 
+<style>
+  /* Animaciones suaves para los inputs */
+  input,
+  textarea {
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  input:focus,
+  textarea:focus {
+    @apply transform scale-[1.01];
+  }
+
+  /* Efecto hover para el formulario */
+  form {
+    @apply transition-all duration-300;
+  }
+
+  form:hover {
+    @apply shadow-md;
+  }
+</style>
+
 <script>
-  import { createResource } from '../services/api.service';
-  import { validateResourceCreate } from '../utils/validation';
-  
-  const form = document.getElementById('resource-form');
-  
-  form?.addEventListener('submit', async (e) => {
+  import { createResource } from "../services/api.service";
+  import { validateResourceCreate } from "../utils/validation";
+
+  const form = document.getElementById("resource-form");
+  const selectedTagsInput = document.getElementById("selectedTags");
+  let selectedTags: number[] = [];
+
+  // Escuchar el evento personalizado de cambio de tags
+  window.addEventListener("tagsChange", ((e: CustomEvent<number[]>) => {
+    selectedTags = e.detail;
+    if (selectedTagsInput) {
+      selectedTagsInput.value = selectedTags.join(",");
+    }
+  }) as EventListener);
+
+  form?.addEventListener("submit", async (e) => {
     e.preventDefault();
-    
-  const formData = new FormData(e.target as HTMLFormElement);
-  const tags = formData.get('tags')?.toString().split(',').map(tag => tag.trim());
-    
- const data = {
-    titulo: formData.get('titulo')?.toString() || '',
-    descripcion: formData.get('descripcion')?.toString() || '',
-    url: formData.get('url')?.toString() || '',
-    tags: tags || []
-  };
-    
+
+    const formData = new FormData(e.target as HTMLFormElement);
+
+    const data = {
+      titulo: formData.get("titulo")?.toString() || "",
+      descripcion: formData.get("descripcion")?.toString() || "",
+      url: formData.get("url")?.toString() || "",
+      tags: selectedTags,
+    };
+
     const errors = validateResourceCreate(data);
     if (errors.length > 0) {
-      alert(errors.join('\n'));
+      alert(errors.join("\n"));
       return;
     }
-    
+
     try {
       await createResource(data);
-      window.location.href = '/';
+      window.location.href = "/";
     } catch (error) {
       if (error instanceof Error) {
         alert(`Error al crear el recurso: ${error.message}`);
       } else {
-        alert('Error al crear el recurso. Por favor, intenta nuevamente.');
+        alert("Error al crear el recurso. Por favor, intenta nuevamente.");
       }
     }
   });
