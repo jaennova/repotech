@@ -5,12 +5,7 @@ import { API_CONFIG } from './config';
 
 export async function getResources(): Promise<Resource[]> {
   try {
-    const response = await apiClient.get(API_CONFIG.ENDPOINTS.RESOURCES, {
-      params: {
-        orden_por: 'tags',
-        direccion: 'asc'
-      }
-    });
+    const response = await apiClient.get(API_CONFIG.ENDPOINTS.RESOURCES);
     return response.data;
   } catch (error) {
     throw handleApiError(error);
