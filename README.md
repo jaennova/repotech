@@ -17,6 +17,68 @@ RepoTech es una aplicación web construida con Astro que proporciona una colecci
 - [TypeScript](https://www.typescriptlang.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
 
+## API Backend
+
+Este proyecto utiliza la API de Recursos Tecnológicos desarrollada en [jaennova/repotech-api](https://github.com/jaennova/repotech-api) para la gestión de recursos y etiquetas.
+
+### Características Principales
+- API REST construida con FastAPI
+- Gestión de recursos tecnológicos y tags asociados
+- Soporte para búsqueda y filtrado
+- Paginación de resultados
+- CORS habilitado específicamente para este frontend
+
+### Endpoints Relevantes
+
+#### Recursos
+- `GET /recursos/`: Lista de recursos (paginada)
+- `POST /recursos/`: Crear nuevo recurso
+- `GET /recursos/buscar/`: Búsqueda con filtros
+  - Parámetros: `q` (búsqueda), `tag`, `skip`, `limit`
+- `DELETE /recursos/{id}`: Eliminar recurso
+
+#### Tags
+- `GET /tags/`: Lista de tags disponibles
+- `DELETE /tags/{id}`: Eliminar tag
+
+### Formato de Datos
+
+```json
+// Crear Recurso
+{
+  "titulo": "string",
+  "descripcion": "string",
+  "url": "string",
+  "tags": ["string"]
+}
+
+// Respuesta Recurso
+{
+  "id": "integer",
+  "titulo": "string",
+  "descripcion": "string",
+  "url": "string",
+  "fecha_creacion": "datetime",
+  "fecha_actualizacion": "datetime",
+  "tags": [
+    {
+      "id": "integer",
+      "nombre": "string"
+    }
+  ]
+}
+```
+
+### Documentación
+Para más detalles sobre los endpoints y modelos de datos, consultar:
+- Swagger UI: `{API_URL}/docs`
+- ReDoc: `{API_URL}/redoc`
+
+### Notas de Integración
+- La API tiene CORS configurado para aceptar peticiones desde `repotech.vercel.app` y `localhost:4321`
+- Soporta paginación en las consultas de recursos
+- Incluye validación de datos y manejo de errores
+
 ## 📁 Estructura del Proyecto
 
 ```text
